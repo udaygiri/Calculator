@@ -21,6 +21,17 @@ DARK_THEME = {
 
 class Calculator:
     def __init__(self):
+        """
+        Initialize the Calculator class.
+
+        This method sets up the calculator window, theme, display, buttons, and key bindings.
+
+        Parameters:
+        None
+
+        Returns:
+        None
+        """
         self.window = tk.Tk()
         self.window.geometry("400x550")
         self.window.title("Calculator")
@@ -52,7 +63,7 @@ class Calculator:
         for i in range(5):
             if i == 0:
                 self.buttons_frame.rowconfigure(i, weight=1)
-            
+
             else:
                 self.buttons_frame.rowconfigure(i, weight=1)
                 self.buttons_frame.columnconfigure(i, weight=1)
@@ -61,26 +72,58 @@ class Calculator:
         self.create_toggle_button()
         self.BindKey()
 
+
     def BindKey(self):
-            self.window.bind("<Key>", self.KeyBorderInput)
+        """
+        Bind keyboard events to the calculator window.
 
+        This method sets up the key binding for keyboard input.
+
+        Parameters:
+        None
+
+        Returns:
+        None
+        """
+        self.window.bind("<Key>", self.KeyBorderInput)
     def KeyBorderInput(self, event):
-            key = event.char
-            if key.isdigit() or key == ".":
-                self.AddToExpression(key)
-            elif key in self.operations:
-                self.AppendOperator(key)
-            elif key == "=" or key == "\r":
-                self.EvaluateExpression()
-            elif key == "c" :
-                self.ClearState()
-            elif key == "BackSpace" or key == "\x08":
-                self.current_expression = self.current_expression[:-1]
-                self.UpdateCurrentState()
-            elif key == "Escape":
-                self.window.quit()
+        """
+        Handle keyboard input events.
 
+        This method processes keyboard input and performs corresponding calculator actions.
+
+        Parameters:
+        event (tk.Event): The keyboard event object.
+
+        Returns:
+        None
+        """
+        key = event.char
+        if key.isdigit() or key == ".":
+            self.AddToExpression(key)
+        elif key in self.operations:
+            self.AppendOperator(key)
+        elif key == "=" or key == "\r":
+            self.EvaluateExpression()
+        elif key == "c" :
+            self.ClearState()
+        elif key == "BackSpace" or key == "\x08":
+            self.current_expression = self.current_expression[:-1]
+            self.UpdateCurrentState()
+        elif key == "Escape":
+            self.window.quit()
     def create_button(self):
+        """
+        Create all buttons for the calculator.
+
+        This method calls other methods to create different types of buttons.
+
+        Parameters:
+        None
+
+        Returns:
+        None
+        """
         self.create_digit_buttons()
         self.create_operator_buttons()
         self.create_equals_button()
@@ -95,7 +138,7 @@ class Calculator:
                                fg=self.current_theme["fg"], 
                                padx=25, 
                                font=("Arial", 25))
-        
+
         total_label.pack(expand=True, fill="both")
 
         current_label = tk.Label(self.display_frame, 
@@ -105,7 +148,7 @@ class Calculator:
                                  fg=self.current_theme["fg"], 
                                  padx=25, 
                                  font=("Arial", 40))
-        
+
         current_label.pack(expand=True, fill="both")
 
         return total_label, current_label
@@ -114,16 +157,16 @@ class Calculator:
         frame = tk.Frame(self.window, 
                          height=100, 
                          bg=self.current_theme["bg"])
-        
+
         frame.pack(expand=True, fill="both")
-        
+
         return frame
 
     def create_buttons_frame(self):
         frame = tk.Frame(self.window)
-        
+
         frame.pack(expand=True, fill="both")
-        
+
         return frame
 
     def create_digit_buttons(self):
@@ -137,11 +180,11 @@ class Calculator:
                                 activebackground=self.current_theme["button_active_bg"],
                                 activeforeground=self.current_theme["button_active_fg"],
                                 command=lambda x=digit: self.AddToExpression(value=x))
-            
+
             button.grid(row=grid_value[0], 
                         column=grid_value[1], 
                         sticky=tk.NSEW)
-            
+
     def UpdateCurrentState(self) -> str:
         self.current_label.config(text=self.current_expression)
         return "Current State Updated"
@@ -149,11 +192,11 @@ class Calculator:
     def UpdateTotalState(self) -> str:
         self.total_label.config(text=self.total_expression)
         return "Total State Updated"
-    
+
     def AddToExpression(self, value) -> None:
         self.current_expression += str(value)
         self.UpdateCurrentState()
-        
+
     def ClearState(self):
         self.current_expression = ""
         self.total_expression = ""
@@ -240,7 +283,7 @@ class Calculator:
         button.grid(row=0, 
                     column=2, 
                     sticky=tk.NSEW)
-        
+
         button = tk.Button(self.buttons_frame,
                            text="%",
                            bg=self.current_theme["button_bg"],
@@ -282,7 +325,7 @@ class Calculator:
             self.current_theme = DARK_THEME
         else:
             self.current_theme = LIGHT_THEME
-        
+
         # Update the entire UI to reflect the new theme
         self.update_ui()
 
@@ -292,7 +335,7 @@ class Calculator:
         self.display_frame.configure(bg=self.current_theme["bg"])
         self.total_label.configure(bg=self.current_theme["bg"], fg=self.current_theme["fg"])
         self.current_label.configure(bg=self.current_theme["bg"], fg=self.current_theme["fg"])
-        
+
         # Update buttons with the new theme except for Equals and Clear buttons
         for widget in self.buttons_frame.winfo_children():
             if widget["text"] != "=" and widget["text"] != "C":
@@ -302,7 +345,20 @@ class Calculator:
                                  activeforeground=self.current_theme["button_active_fg"])
 
     def run(self):
+        """
+        Start the main event loop for the calculator application.
+
+        This method initiates the Tkinter main loop, which handles all GUI events
+        and keeps the application window open until it is closed by the user.
+
+        Parameters:
+        None
+
+        Returns:
+        None
+        """
         self.window.mainloop()
+
 
 # Create and run the calculator
 calculator = Calculator()
